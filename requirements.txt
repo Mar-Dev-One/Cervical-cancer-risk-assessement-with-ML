@@ -5,6 +5,7 @@ pandas
 numpy
 matplotlib
 seaborn
+lightgbm
 streamlit
 scipy
 plotly
@@ -13,4 +14,3 @@ xgboost
 catboost
 imblearn
 ipython
-lightgbm
