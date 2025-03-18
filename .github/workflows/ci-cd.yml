@@ -32,7 +32,7 @@ jobs:
       # Step 4: Run tests (optional)
       - name: Run tests
         run: |
-          python src/ProsAndTrain/SHAPexpls.py
+          python src\ProAndTrain\SHAPexpls.py --model genModels\xgboost.pkl --data data\output.csv
 
       # Step 5: Deploy to Streamlit Cloud or Heroku (optional, for CD)
       - name: Deploy to Streamlit Cloud
