@@ -1,3 +1,15 @@
+##
+# @file dataProcessing.py
+# @brief Data preprocessing utilities for handling missing values in medical/health datasets.
+#
+# This module provides functions to clean and impute missing values in datasets 
+# containing demographic and health-related information. It specifically handles
+# STD-related columns, numeric conversions, and various imputation strategies
+# based on grouping variables like age and number of sexual partners.
+#
+# @author Unknown
+# @date Unknown
+#
 
 import numpy as np
 import pandas as pd
@@ -9,6 +21,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
+##
+# @brief Fills NaN values in a specific column with the mean value from the same age group.
+#
+# @param row The current row being processed
+# @param df_filtered The filtered dataframe containing only valid age groups
+# @param column The column name where NaN values should be filled
+#
+# @return The original value if not NaN, otherwise the age group's mean value
+#
 def fill_nan_with_group_mean(row, df_filtered, column):
     if pd.isna(row[column]):
 
@@ -20,6 +41,15 @@ def fill_nan_with_group_mean(row, df_filtered, column):
     else:
         return row[column]
     
+##
+# @brief Fills NaN values in a group with the mode (most common value) of that group.
+#
+# If no mode exists (empty group), defaults to filling with True.
+#
+# @param group A pandas Series or DataFrame group containing values
+#
+# @return The group with NaN values filled with the mode or fallback value
+#
 def fill_with_mode(group):
     # Try to get the mode of the group
     mode_value = group.mode()
@@ -31,6 +61,23 @@ def fill_with_mode(group):
         # Provide a fallback value in case of empty groups (can be set to True or False or the global mode)
         return group.fillna(True)  # Example fallback value: True
 
+##
+# @brief Main data processing function that handles cleaning and imputation of a medical dataset.
+#
+# This function performs the following operations:
+#   1. Removes specific STD-related time columns
+#   2. Removes columns that start with 'STDs:' except for 'STDs: Number of diagnosis'
+#   3. Converts all columns to numeric where possible
+#   4. Filters for age groups with more than one observation
+#   5. Fills missing numeric values using age-specific means
+#   6. Imputes binary columns using group-specific modes
+#   7. Sets missing pregnancy counts to zero
+#   8. Saves the processed data to a CSV file
+#
+# @param df The input pandas DataFrame containing the medical/health data
+#
+# @return The processed pandas DataFrame with imputed values
+#
 def process_data(df : pd.DataFrame):
     df.drop('STDs: Time since last diagnosis', axis=1, inplace=True)
     df.drop('STDs: Time since first diagnosis', axis=1, inplace=True)

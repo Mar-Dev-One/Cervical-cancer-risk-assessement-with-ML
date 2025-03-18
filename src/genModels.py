@@ -1,8 +1,36 @@
+"""
+Trains and saves a machine learning model for cervical cancer risk prediction.
 
+This script loads cervical cancer risk factor data, processes it, and trains a 
+selected machine learning model (XGBoost by default). The model is evaluated on 
+both training and test sets, and then saved as a pickle file for later use.
+
+The script performs the following operations:
+- Loads cervical cancer risk factor dataset
+- Processes the data using a custom processing function
+- Selects a machine learning model (XGBoost)
+- Splits the data into training and test sets
+- Applies feature scaling using StandardScaler
+- Handles class imbalance using SMOTE oversampling
+- Trains the model on the resampled data
+- Evaluates the model performance on both training and test sets
+- Saves the trained model to disk
+
+Note: The target variable 'Biopsy' is used as the prediction target
+
+Dependencies:
+- ProAndTrain.dataProcessing: Module for data preprocessing
+- ProAndTrain.model: Module containing the MLModel class
+- numpy: For numerical operations
+- pandas: For data manipulation
+- sklearn: For preprocessing and model evaluation
+- imblearn: For handling class imbalance
+- joblib: For saving the trained model
+"""
 import numpy as np
 import pandas as pd
 
-from ProAndTrain import dataProcessing, model
+from ProsAndTrain import dataProcessing, model
 
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.model_selection import train_test_split
@@ -10,11 +38,8 @@ from sklearn.model_selection import train_test_split
 
 from imblearn.over_sampling import SMOTE
 
-import os
-
 import joblib
 
-print(os.getcwd())
 
 df = pd.read_csv("../data/risk_factors_cervical_cancer.csv")
 df = dataProcessing.process_data(df)

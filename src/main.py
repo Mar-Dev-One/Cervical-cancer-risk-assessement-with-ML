@@ -1,3 +1,38 @@
+"""
+Cervical Cancer Risk Assessment Web Application
+
+This script creates a Streamlit web application that predicts cervical cancer risk
+using machine learning models. Users input health information through a user-friendly
+interface, and the application returns a risk assessment based on the selected model.
+
+Key features:
+- Multiple machine learning model options for prediction
+- Detailed patient information collection through a form interface
+- SHAP (SHapley Additive exPlanations) integration for model interpretability
+- Responsive and accessible medical-themed UI design
+- Risk visualization with informative graphics
+
+The application flow:
+1. Loads selected machine learning model from disk
+2. Collects patient information through input fields
+3. Processes input data for model compatibility
+4. Generates risk prediction when user submits the form
+5. Displays prediction results with appropriate risk level indicators
+6. Provides option to view SHAP explanation visualizations
+
+Dependencies:
+- streamlit: For web application framework
+- joblib: For loading saved ML models
+- shap: For model interpretability visualizations
+- matplotlib: For visualization support
+- numpy: For numerical operations
+- pandas: For data manipulation
+- sklearn: For model metrics and preprocessing
+
+Note: This application is intended for risk assessment only and not for medical diagnosis.
+Users are advised to consult healthcare providers for proper medical advice.
+"""
+
 import streamlit as st
 import joblib
 import shap  # Import SHAP library
@@ -10,22 +45,6 @@ import pandas as pd
 from sklearn.metrics import roc_auc_score, accuracy_score, precision_score, recall_score, f1_score, roc_curve
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-
-
-def show_images():
-    # Load images (make sure to replace these with your actual image paths)
-    image_paths = ["shap_results/shap_bar_plot.jpg", "shap_results/shap_decision_plot.jpg", "shap_results/shap_force_plot.jpg", "shap_results/shap_summary_plot.jpg"]
-
-    # Create a 2x2 layout to display images
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.image(image_paths[0], caption="shap_summary_plot", use_container_width=True)
-        st.image(image_paths[1], caption="shap_decision_plot", use_container_width=True)
-
-    with col2:
-        st.image(image_paths[2], caption="shap_force_plot", use_column_width=True)
-        st.image(image_paths[3], caption="shap_summary_plot", use_container_width=True)
 
 df = pd.read_csv("data/output.csv")
 
@@ -71,96 +90,105 @@ elif choice == "CatBoost Classifier":
 
 # Custom CSS for medical theme appearance
 st.markdown("""
-    <style>
+        <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #00d8ff; /* Light blue/gray background */
-            color: #2c3e50; /* Dark blue text for better readability */
+            background-color: #f8f0f7; /* Soft pastel pink background */
+            color: #4a4a4a; /* Soft gray text for readability */
         }
+
         .stRadio > div {
             display: flex;
             justify-content: space-around;
-            background-color: #00d8ff; /* Light blue background for radio buttons */
+            background-color: #f8e1f4; /* Soft pastel pink background for radio buttons */
             border-radius: 6px;
             padding: 10px;
         }
+
         .stTextInput, .stNumberInput, .stRadio {
             margin-bottom: 20px;
             border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.0);
-            border: 1px solid #c9d6df; /* Soft blue border */
-            background-color: #008fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f1a7cb; /* Light pink border */
+            background-color: #f1c6d4; /* Soft pink background */
         }
+
         .stButton > button {
-            background-color: #00d8ff; /* Medical blue button */
+            background-color: #f7a0c5; /* Soft pink button */
             color: white;
             font-size: 16px;
             border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             font-weight: bold;
         }
+
         .stButton > button:hover {
-            background-color: #2980b9; /* Slightly darker blue on hover */
+            background-color: #e26f92; /* Slightly darker pink on hover */
         }
+
         .stSubheader {
             font-size: 18px;
-            color: #00d8ff; /* Medical blue for subheaders */
+            color: #f7a0c5; /* Soft pink for subheaders */
             font-weight: bold;
             text-align: left;
-            border-bottom: 1px solid #c9d6df;
+            border-bottom: 1px solid #f1a7cb;
             padding-bottom: 5px;
         }
+
         .stTitle {
-            color: #00d8ff; /* Medical blue */
+            color: #f7a0c5; /* Soft pink */
             font-size: 32px;
             text-align: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #c9d6df;
+            border-bottom: 2px solid #f1a7cb;
             padding-bottom: 10px;
         }
+
         .stText, .stMarkdown {
             font-size: 16px;
-            color: #2c3e50; /* Dark blue text */
+            color: #4a4a4a; /* Soft gray text */
             text-align: left;
         }
+
         .stRadio label {
             font-size: 16px;
-            color: #2c3e50; /* Dark blue text */
+            color: #4a4a4a; /* Soft gray text */
             font-weight: 500;
         }
+
         .stNumberInput input {
             font-size: 16px;
         }
-        
-        /* Medical section styling */
+
+        /* Header styling */
         [data-testid="stHeader"] {
-            background-color: #008fff;
+            background-color: #f1c6d4;
             padding: 20px;
-            border-bottom: 3px solid #00d8ff;
+            border-bottom: 3px solid #f7a0c5;
         }
-        
+
         /* Prediction result styling */
         .prediction-result {
-            background-color: #f8f9fa;
-            border-left: 4px solid #3498db;
+            background-color: #fceff4;
+            border-left: 4px solid #f7a0c5;
             padding: 10px 15px;
             margin: 20px 0;
             border-radius: 0 6px 6px 0;
         }
-        
+
         /* Info card styling */
         .info-card {
-            background-color: #e3f2fd;
+            background-color: #f9e5f2;
             padding: 15px;
             border-radius: 6px;
             margin: 15px 0;
-            border: 1px solid #bbdefb;
+            border: 1px solid #f1c6d4;
         }
-        
+
         /* Warning/important result styling */
         .warning-result {
-            background-color: #fdf2e9;
-            border-left: 4px solid #e67e22;
+            background-color: #fff4e1;
+            border-left: 4px solid #f7c100;
             padding: 10px 15px;
             margin: 20px 0;
             border-radius: 0 6px 6px 0;
@@ -295,4 +323,17 @@ if toggle_button:
 
 # Display images if the state is True
 if st.session_state.show:
-    show_images()
+    # Load images (make sure to replace these with your actual image paths)
+    image_paths = ["shap_results/shap_bar_plot.png", "shap_results/shap_decision_plot.png",
+                   "shap_results/shap_force_plot_example_1.png", "shap_results/shap_summary_plot.png"]
+
+    # Create a 2x2 layout to display images
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.image(image_paths[0], caption="shap_summary_plot", use_container_width=True)
+        st.image(image_paths[1], caption="shap_decision_plot", use_container_width=True)
+
+    with col2:
+        st.image(image_paths[2], caption="shap_force_plot", use_container_width =True)
+        st.image(image_paths[3], caption="shap_summary_plot", use_container_width=True)

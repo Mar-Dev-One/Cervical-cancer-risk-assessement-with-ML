@@ -1,3 +1,18 @@
+##
+# @file SHAPexpls.py
+# @brief A comprehensive tool for generating SHAP (SHapley Additive exPlanations) visualizations for machine learning models.
+#
+# This module provides functionality to:
+# - Load machine learning models and datasets
+# - Create appropriate SHAP explainers based on model type
+# - Generate SHAP values for model explanations
+# - Create various visualization plots (summary, bar, dependence, force, decision plots)
+# - Save visualizations and feature importance metrics
+#
+# The module includes both commented out example functions and a complete command-line interface
+# for batch processing of model explanations.
+#
+
 import shap as sh
 
 """
@@ -23,6 +38,17 @@ import os
 import argparse
 
 
+##
+# @brief Load a machine learning model and dataset for SHAP analysis
+#
+# @param model_path Path to the serialized model file (.pkl)
+# @param data_path Path to the dataset file (.csv)
+#
+# @return tuple Containing (model, X_sample, feature_names) where:
+#         - model: The loaded machine learning model
+#         - X_sample: A sample of the dataset for SHAP analysis (may be downsampled if large)
+#         - feature_names: List of feature names from the dataset
+#
 def load_model_and_data(model_path, data_path):
     """
     Load a saved model from a .pkl file and the associated data for SHAP explanations
@@ -53,6 +79,18 @@ def load_model_and_data(model_path, data_path):
     return model, X_sample, feature_names
 
 
+##
+# @brief Create an appropriate SHAP explainer based on the model type
+#
+# This function automatically detects the model type or uses a specified type
+# to create the most suitable SHAP explainer (TreeExplainer, LinearExplainer, or KernelExplainer).
+#
+# @param model The machine learning model to explain
+# @param X_sample Sample data for the explainer
+# @param model_type Optional model type specification to override auto-detection
+#
+# @return shap.Explainer An appropriate SHAP explainer object for the model
+#
 def create_shap_explainer(model, X_sample, model_type=None):
     """
     Create appropriate SHAP explainer based on model type
@@ -91,6 +129,14 @@ def create_shap_explainer(model, X_sample, model_type=None):
         return shap.KernelExplainer(predict_fn, X_sample)
 
 
+##
+# @brief Generate SHAP values for a dataset using a SHAP explainer
+#
+# @param explainer SHAP explainer object
+# @param X_sample Data sample to generate explanations for
+#
+# @return SHAP values for the provided data sample
+#
 def generate_shap_values(explainer, X_sample):
     """
     Generate SHAP values using the explainer
@@ -106,6 +152,11 @@ def generate_shap_values(explainer, X_sample):
     return explainer.shap_values(X_sample)
 
 
+##
+# @brief Create the output directory for saving visualizations if it doesn't exist
+#
+# @param output_dir Path to the directory where visualizations will be saved
+#
 def create_output_directory(output_dir):
     """
     Create output directory if it doesn't exist
@@ -120,6 +171,21 @@ def create_output_directory(output_dir):
         print(f"Output directory already exists: {output_dir}")
 
 
+##
+# @brief Generate and save various SHAP visualizations
+#
+# This function creates and saves multiple visualization types:
+# - Summary plot (feature importance)
+# - Bar plot (mean absolute SHAP values)
+# - Dependence plots for top 5 features
+# - Force plots for sample examples
+# - Decision plot for top examples
+#
+# @param shap_values Computed SHAP values
+# @param X_sample Data sample used for explanations
+# @param feature_names List of feature names
+# @param output_dir Directory to save the visualization files
+#
 def generate_shap_visualizations(shap_values, X_sample, feature_names, output_dir):
     """
     Generate and save various SHAP visualizations
@@ -215,6 +281,15 @@ def generate_shap_visualizations(shap_values, X_sample, feature_names, output_di
     print(f"All visualizations saved to {output_dir}")
 
 
+##
+# @brief Main program entry point with command-line argument parsing
+#
+# Command-line arguments:
+# - --model: Path to the serialized model file
+# - --data: Path to the dataset file
+# - --output: Directory for saving visualizations (default: 'shap_results')
+# - --model-type: Optional model type specification
+#
 parser = argparse.ArgumentParser(description='Generate SHAP explanation visualizations for a trained model.')
 parser.add_argument('--model', type=str, required=True, help='Path to .pkl model file')
 parser.add_argument('--data', type=str, required=True, help='Path to CSV data file')
@@ -264,5 +339,3 @@ feature_importance.to_csv(importance_file, index=False)
 print(f"Feature importance saved to {importance_file}")
 
 print("SHAP analysis completed successfully!")
-
-
