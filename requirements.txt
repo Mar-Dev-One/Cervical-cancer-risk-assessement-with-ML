@@ -10,7 +10,7 @@ scipy
 plotly
 joblib
 xgboost
-lightgbm
 catboost
 imblearn
 ipython
+lightgbm
