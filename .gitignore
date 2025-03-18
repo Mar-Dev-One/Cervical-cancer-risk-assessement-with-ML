@@ -5,6 +5,7 @@
 __pycache__/
 *.pdb
 *.cover
+*.vscode
 
 # Virtual environment directories
 .venv/
