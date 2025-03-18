@@ -1,4 +1,4 @@
-# Cervical Cancer Risk Assessment Tool
+# Cervical Cancer Risk Assessment Tool 
 [![Streamlit CI/CD](https://github.com/Mar-Dev-One/Cervical-cancer-risk-assessement-with-ML/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Mar-Dev-One/Cervical-cancer-risk-assessement-with-ML/actions/workflows/ci-cd.yml)
 
 ## Overview
@@ -21,21 +21,30 @@ This project is a web-based application that uses machine learning models to ass
 ## Technical Components
 The application consists of two main parts:
 
-### 1. Model Generation (`src/genModels.py`)
+### 1. Model Generation (`genModels.py`)
 - Processes raw cervical cancer risk factor data
 - Applies data preprocessing techniques
-- Handles class imbalance using SMOTE
+- **Handles class imbalance using SMOTE (Synthetic Minority Over-sampling Technique)**
+  - The dataset contains an imbalance between positive and negative cases
+  - SMOTE generates synthetic samples of the minority class to balance the dataset
+  - This approach improves model performance and reduces bias toward the majority class
 - Trains various machine learning models
+- **XGBoost model demonstrated the best overall performance** among all tested models
 - Evaluates model performance
 - Saves trained models for later use
 
-### 2. Web Application (`src/main.py`)
+### 2. Web Application (`main.py`)
 - Built with Streamlit framework
 - Loads pre-trained machine learning models
 - Collects detailed patient information
 - Predicts cervical cancer risk using the selected model
 - Provides visual explanations using SHAP
 - Displays risk assessment in an easy-to-understand format
+
+## Key Findings
+- **Feature Importance**: The Schiller test result was identified as the most important feature for predicting cervical cancer risk
+- The SHAP analysis reveals clear patterns in how different risk factors contribute to the overall prediction
+- Model achieved good performance metrics with ~74% precision for negative cases and ~64% precision for positive cases
 
 ## Data
 The application uses a cervical cancer risk factors dataset with the following key features:
@@ -82,6 +91,14 @@ The application uses a cervical cancer risk factors dataset with the following k
 5. View your risk assessment result
 6. Optionally, view SHAP visualizations for more insights
 
+## Prompt Engineering Insights
+Prompt engineering provided several key insights for this project:
+
+1. **Effective data visualization**: Careful crafting of the user interface prompts helped balance technical accuracy with accessibility, making complex medical information understandable to non-specialists
+2. **Clear risk communication**: Iterative refinement of how risk assessments are presented ensured users understand results without causing undue anxiety
+3. **Ethical considerations**: Designing appropriate disclaimers and medical guidance prompts was essential for responsible deployment of an AI health tool
+4. **User engagement**: Structuring the input form with logical groupings and progressive disclosure improved completion rates and data quality
+
 ## Important Notes
 - This tool is for risk assessment only and is not a substitute for medical advice
 - Regular cervical cancer screening is recommended regardless of the risk assessment
@@ -109,3 +126,4 @@ The application uses a cervical cancer risk factors dataset with the following k
 - Data source: [Insert data source if applicable]
 - SHAP library for model interpretability
 - Streamlit for the web application framework
+- imblearn library for handling class imbalance
