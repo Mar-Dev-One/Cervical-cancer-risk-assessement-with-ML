@@ -83,6 +83,11 @@ The application uses a cervical cancer risk factors dataset with the following k
    streamlit run main.py
    ```
 
+5. Generation docs:
+   ```
+   doxygen -g
+   ```
+
 ## Usage
 1. Open the application in your web browser
 2. Select your preferred machine learning model
